@@ -1,7 +1,5 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-
 import '../models/order.dart';
 import '../models/product.dart';
 import '../pages/order_details_page.dart';

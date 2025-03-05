@@ -5,6 +5,8 @@ import 'package:greenhouse_app/pages/services_page.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:provider/provider.dart';
+import '../providers/user_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,12 +16,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final pages = [const ExplorePage(), const ServicesPage(), const CartPage(), const ProfilePage()];
+  final pages = [
+    const ExplorePage(),
+    const ServicesPage(),
+    const CartPage(),
+    const ProfilePage()
+  ];
   int currentPageIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
+
+    // Get the user's name from the provider
+    String userName = Provider.of<UserProvider>(context).user?.name ?? 'User';
+
     return Scaffold(
       key: _scaffoldKey,
       drawer: const Drawer(),
@@ -35,7 +46,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Hi Wilson 👋🏾",
+              "Hi $userName 👋🏾",
               style: Theme.of(context).textTheme.titleMedium,
             ),
             Text("Enjoy our services", style: Theme.of(context).textTheme.bodySmall)

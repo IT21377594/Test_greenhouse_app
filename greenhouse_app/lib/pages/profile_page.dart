@@ -1,9 +1,34 @@
 import 'package:greenhouse_app/pages/orders_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import '../services/auth_service.dart';
+import '../services/user_service.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  String userName = "";
+  String userEmail = "";
+  final UserService _userService = UserService();
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserProfile();
+  }
+
+  Future<void> _fetchUserProfile() async {
+    var user = await _userService.getUserProfile();
+    setState(() {
+      userName = user['name'] ?? "";
+      userEmail = user['email'] ?? "";
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +49,13 @@ class ProfilePage extends StatelessWidget {
           ),
           Center(
             child: Text(
-              "Jessi Williams",
+              userName,
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
           Center(
             child: Text(
-              "jessiwills@gmail.com",
+              userEmail,
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ),
@@ -53,8 +78,13 @@ class ProfilePage extends StatelessWidget {
           ),
           ListTile(
             title: const Text("Logout"),
-            leading: const Icon(IconlyLight.logout),
-            onTap: () {},
+            leading: const Icon(Icons.logout),
+            onTap: () async {
+              AuthService authService = AuthService();
+              await authService.logout(); // Call the logout method
+              Navigator.pushReplacementNamed(
+                  context, '/signin'); // Redirect to Signin page
+            },
           ),
         ],
       ),

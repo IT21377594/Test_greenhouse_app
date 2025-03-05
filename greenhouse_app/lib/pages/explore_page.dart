@@ -56,7 +56,7 @@ class ExplorePage extends StatelessWidget {
                 elevation: 0.1,
                 shadowColor: Colors.green.shade50,
                 child: Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(8),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

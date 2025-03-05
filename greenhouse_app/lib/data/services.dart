@@ -7,7 +7,7 @@ List<Service> services = [
   ),
   const Service(
     name: "Weed Detection",
-    image: "assets/services/seedlings.jpg",
+    image: "assets/services/weeds.jpeg",
   ),
   const Service(
     name: "Quality Assessment",
