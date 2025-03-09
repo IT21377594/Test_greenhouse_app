@@ -4,7 +4,7 @@ import 'dart:io';
 class ImageDisplayPage extends StatelessWidget {
   final File image;
 
-  const ImageDisplayPage({super.key, required this.image});
+  const ImageDisplayPage({super.key, required this.image, required List boxes});
 
   @override
   Widget build(BuildContext context) {

@@ -3,28 +3,29 @@ from fastapi.responses import JSONResponse
 from io import BytesIO
 from PIL import Image
 from models.weed_detection import WeedDetectionModel
-from config import settings  # Make sure the import path is correct
+from config import settings
 
-# Create the router instance
 router = APIRouter()
 
-# Initialize the model
+# Load the model
 model = WeedDetectionModel(settings.MODEL_PATH)
 
 @router.post("/detect-weed/")
 async def detect_weed(file: UploadFile = File(...)):
     try:
-        # Read the uploaded file
+        # Read image file
         image_bytes = await file.read()
         image = Image.open(BytesIO(image_bytes))
 
-        # Detect weeds in the image
-        is_weed = model.detect_weeds(image)
+        print("Image received. Processing...")  # Debugging log
 
-        if is_weed:
-            return JSONResponse(content={"message": "Weeds detected!", "has_weeds": True})
-        else:
-            return JSONResponse(content={"message": "No weeds detected.", "has_weeds": False})
+        # Detect weeds and bounding boxes
+        result = model.detect_weeds(image)
+
+        print("Model Output:", result)  # Debugging log
+
+        return JSONResponse(content=result)
 
     except Exception as e:
+        print("API Error:", str(e))
         return JSONResponse(content={"message": str(e), "status": "error"}, status_code=400)
