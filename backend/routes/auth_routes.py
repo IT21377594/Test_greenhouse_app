@@ -42,8 +42,20 @@ def signup(user: UserCreate):
         raise HTTPException(status_code=400, detail="Email already registered")
     
     hashed_password = bcrypt.hash(user.password)
-    users_collection.insert_one({"name": user.name, "email": user.email, "password": hashed_password})
-    return {"message": "User registered successfully"}
+    users_collection.insert_one({
+        "name": user.name,
+        "email": user.email,
+        "password": hashed_password
+    })
+    
+    # Create JWT token
+    token = create_jwt(user.email)
+
+    return {
+        "token": token,
+        "name": user.name,  # Make sure to return the name
+        "message": "User registered successfully"
+    }
 
 @router.post("/signin")
 def signin(user: UserLogin):
@@ -52,7 +64,8 @@ def signin(user: UserLogin):
         raise HTTPException(status_code=400, detail="Invalid credentials")
     
     token = create_jwt(user.email)
-    return {"token": token, "message": "Signin successful"}
+    # Return the token along with the user's name
+    return {"token": token, "name": db_user["name"], "message": "Signin successful"}
 
 @router.get("/user/profile", response_model=UserProfile)
 def get_user_profile(user: dict = Depends(get_current_user)):

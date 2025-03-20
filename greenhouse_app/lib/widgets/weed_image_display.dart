@@ -11,7 +11,12 @@ class ImageDisplayPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text("Detection Result"), backgroundColor: Colors.green),
+          title: const Text(
+            "Detection Result",
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: const Color(0xff083C27)
+      ),
       body: Center(
         child: Stack(
           children: [
@@ -41,7 +46,7 @@ class ImageDisplayPage extends StatelessWidget {
                   ),
                 ),
               );
-            }).toList(),
+            }),
           ],
         ),
       ),

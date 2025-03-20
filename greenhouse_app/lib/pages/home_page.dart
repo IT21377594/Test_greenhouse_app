@@ -5,8 +5,7 @@ import 'package:greenhouse_app/pages/services_page.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
-import 'package:provider/provider.dart';
-import '../providers/user_provider.dart';
+import '../services/auth_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,13 +23,24 @@ class _HomePageState extends State<HomePage> {
   ];
   int currentPageIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  String userName = 'User'; // Default user name
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  // This method fetches user data after the app is restarted.
+  Future<void> _loadUserData() async {
+    var userData = await AuthService().getUserData(); // Fetch user data
+    setState(() {
+      userName = userData['name'] ?? 'User'; // Update the user name
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    // Get the user's name from the provider
-    String userName = Provider.of<UserProvider>(context).user?.name ?? 'User';
-
     return Scaffold(
       key: _scaffoldKey,
       drawer: const Drawer(),
@@ -46,10 +56,11 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Hi $userName 👋🏾",
+              "Hi $userName 👋🏾", // Displaying the real user name
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            Text("Enjoy our services", style: Theme.of(context).textTheme.bodySmall)
+            Text("Enjoy our services",
+                style: Theme.of(context).textTheme.bodySmall)
           ],
         ),
         actions: [

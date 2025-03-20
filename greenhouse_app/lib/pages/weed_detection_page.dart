@@ -13,21 +13,26 @@ class WeedDetectionPage extends StatefulWidget {
 
 class _WeedDetectionPageState extends State<WeedDetectionPage> {
   File? _image;
+  final ImagePicker _picker = ImagePicker();
   bool _isLoading = false;
 
-  // Function to pick an image from the gallery
-  Future<void> _pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+  // Function to pick an image from the gallery or capture from the camera
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await _picker.pickImage(source: source);
 
     if (pickedFile != null) {
       File imageFile = File(pickedFile.path);
 
       setState(() {
         _image = imageFile;
+        _isLoading = true;
       });
 
       List<dynamic> boxes = await ApiService.uploadImage(_image!);
+
+      setState(() {
+        _isLoading = false;
+      });
 
       // Debug: Print bounding boxes before navigating
       print("Bounding Boxes Sent to Result Page: $boxes");
@@ -66,7 +71,7 @@ class _WeedDetectionPageState extends State<WeedDetectionPage> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: const Text(
-              "Capture or Upload a Chili Plant to Check Quality.",
+              "Capture or Upload an Image to Detect Weeds.",
               style: TextStyle(fontSize: 24),
               textAlign: TextAlign.left,
             ),
@@ -74,41 +79,44 @@ class _WeedDetectionPageState extends State<WeedDetectionPage> {
           Expanded(
             child: _isLoading
                 ? const Center(
-                    child:
-                        CircularProgressIndicator()) // Show loading while processing
+                    child: CircularProgressIndicator(),
+                  ) // Show loading while processing
                 : _image != null
                     ? Image.file(_image!,
-                        width: 300, height: 300, fit: BoxFit.cover)
-                    : const Text("Select an Image"),
+                        width: 300, height: 300, fit: BoxFit.contain)
+                    : Image.asset(
+                        'assets/capture.png',
+                        width: 400,
+                        height: 300,
+                        fit: BoxFit.contain,
+                      ), // Show camera image if no image is selected
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: Column(
               children: [
                 ElevatedButton(
-                  onPressed: _pickImage, // Pick and upload the image
+                  onPressed: () => _pickImage(ImageSource.camera),
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(200, 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child:
-                      const Text("Add Image", style: TextStyle(fontSize: 20)),
+                  child: const Text("Capture Photo",
+                      style: TextStyle(fontSize: 20)),
                 ),
                 const SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: () {
-                    // Future: Add logic for real-time scan here
-                  },
+                  onPressed: () => _pickImage(ImageSource.gallery),
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(200, 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child:
-                      const Text("Scan Image", style: TextStyle(fontSize: 20)),
+                  child: const Text("Upload Image",
+                      style: TextStyle(fontSize: 20)),
                 ),
               ],
             ),

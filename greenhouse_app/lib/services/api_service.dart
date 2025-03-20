@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ApiService {
-  static const String baseUrl = "http://192.168.8.182:8000/weed/detect-weed/";
+  static const String baseUrl = "http://100.103.95.80:8000/weed/detect-weed/";
 
   static Future<List<dynamic>> uploadImage(File imageFile) async {
     try {

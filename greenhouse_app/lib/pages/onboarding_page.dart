@@ -1,4 +1,4 @@
-import 'package:greenhouse_app/pages/home_page.dart';
+import 'package:greenhouse_app/pages/signup_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -16,14 +16,16 @@ class OnboardingPage extends StatelessWidget {
               const Spacer(),
               ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 380),
-                child: Image.asset('assets/onboarding.png'),
+                child: Image.asset('assets/onboard.png'),
               ),
               const Spacer(),
-              Text('Manage your Greenhouse',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(fontWeight: FontWeight.bold)),
+              Text(
+                'Manage your Greenhouse',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontSize: 25, // Increase text size (adjust as needed)
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
               const Padding(
                 padding: EdgeInsets.only(top: 30, bottom: 30),
                 child: Text(
@@ -35,7 +37,7 @@ class OnboardingPage extends StatelessWidget {
               FilledButton.tonalIcon(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
-                      CupertinoPageRoute(builder: (context) => HomePage()));
+                      CupertinoPageRoute(builder: (context) => Signup()));
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xff04BD7C),

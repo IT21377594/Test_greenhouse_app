@@ -12,7 +12,10 @@ class ResultPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text("Detection Result"), backgroundColor: Colors.green),
+        title: const Text("Detection Result"),
+        backgroundColor: const Color(0xff083C27),
+        foregroundColor: Colors.white,
+      ),
       body: Center(
         child: ImageDisplayPage(image: image, boxes: boxes),
       ),
